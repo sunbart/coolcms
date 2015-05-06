@@ -5,11 +5,13 @@
     var currentOffset = 0;
     var currentCount = 5;
     var postDetail = false;
+    var self = this;
     
     var settings = $.extend({
       server: "coolcms.php"
     }, options);
     
+    //Expand post click event
     $('#blog').on('click', '.postHeading', function(event){
       
       var postId = $(this).parent().data('id');
@@ -23,8 +25,7 @@
       
     });
 
-    var self = this;
-
+    //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags
     var formatPost = function(d) {
 
       var s = '';
@@ -46,7 +47,7 @@
       
     };
 
-
+    //Loads the first 5 posts
     $.getJSON(settings.server, function(data) {
 
       $(self).empty();
@@ -63,6 +64,7 @@
 
     });
 
+    //Loads one more post, appends it in a proper format and creates a new "Show More Posts" button, if appropriate
     var showMorePosts = function(){     
       
       $.getJSON(settings.server, {more: currentOffset + currentCount, count: 1}, function(data){
@@ -85,6 +87,7 @@
       });      
     }
     
+    //Loads, formats and appends the whole post identified by postId
     var showPostDetails = function(postId){
       
       $.getJSON(settings.server, {post: postId}, function(data){ 
@@ -109,13 +112,10 @@
       
       });     
       
-    }
-    
-    
+    }   
 
     return this;
 
   };
-
 
 }(jQuery));

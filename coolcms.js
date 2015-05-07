@@ -129,5 +129,15 @@
     return this;
 
   };
+  
+  $.fn.coolcmsAdmin = function(options){
+  
+    var settings = $.extend({
+      server: "coolcms.php"
+    }, options);
+        
+    alert('Hello');
+    
+  }
 
 }(jQuery));

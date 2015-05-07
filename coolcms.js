@@ -135,9 +135,11 @@
     var settings = $.extend({
       server: "coolcms.php"
     }, options);
-        
-    alert('Hello');
     
+    var self = this;
+    
+    $(self).append('<textarea id="input"></textarea>');
+      
   }
 
 }(jQuery));

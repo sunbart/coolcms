@@ -2,14 +2,19 @@
 
   $.fn.coolcms = function(options) {
     
-    var currentOffset = 0;
-    var currentCount = 5;
-    var postDetail = false;
-    var self = this;
-    
     var settings = $.extend({
       server: "coolcms.php"
     }, options);
+    
+    //declaration of general variables used throughout the script
+    {
+      var currentOffset = 0;
+      var currentCount = 5;
+      var postDetail = false;
+      var self = this;
+      var previousWindowPostion = 0;
+    }
+    
     
     //Expand post click event
     $('#blog').on('click', '.postHeading', function(event){
@@ -19,11 +24,13 @@
       if(postDetail == false){
         showPostDetails(postId);
         postDetail = true;
+        previousWindowPostion = $(window).scrollTop();
       } else {
         $('.detailedPost').remove();
         $('div .post').show();
         $('#morePostsButton').show();
         postDetail = false;
+        $(window).scrollTop(previousWindowPostion);
       }
       
       

@@ -18,9 +18,14 @@
        
       if(postDetail == false){
         showPostDetails(postId);
+        postDetail = true;
       } else {
-        hidePostDetails();        
+        $('.detailedPost').remove();
+        $('div .post').show();
+        $('#morePostsButton').show();
+        postDetail = false;
       }
+      
       
       
     });

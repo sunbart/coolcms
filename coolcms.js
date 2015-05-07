@@ -139,6 +139,8 @@
     var self = this;
     
     $(self).append('<textarea id="input"></textarea>');
+    
+    $(self).append(html_content);
       
   }
 

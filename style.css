@@ -1,8 +1,26 @@
-#blog {
+body {
+
+  margin: 0;
+  padding: 0;
+  padding-top: 1px;
+  
+}
+
+#blog, #admin {
 
   width: 900px;
   margin: 0 auto;
 
+}
+
+#input {
+
+  width: 850px;
+  height: 300px;
+  margin: 20px auto;
+  display: block;
+  resize: vertical;
+  
 }
 
 #morePostsButton {

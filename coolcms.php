@@ -53,6 +53,10 @@ if(count($_GET)) {
       
       print_r(json_encode($toSend));
       
+    } else if (isset($_GET['clean'])) {
+    
+      get_post_by_id(mysqli_escape_string($link, $_GET['clean']),true);
+    
     }
 	
 } else {
@@ -105,8 +109,14 @@ function get_post_by_id($postId, $clean){
   
   $sql = 'SELECT * FROM posts WHERE id = ' . $postId;  
   $result = mysqli_query($link, $sql);
-  
   $toSend = mysqli_fetch_assoc($result);
+  
+  if(!$clean){
+  
+    $toSend['body'] = parse($toSend['body']);
+  
+  }
+  
   print json_encode($toSend);
 
 }

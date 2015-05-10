@@ -65,27 +65,23 @@
     
       var postId = $(this).parent().data('id');
       
-      var title;
-      var body;
+      var self = this;
       
-      $.getJSON(settings.server, {clean: postId}, function(data){
+      $.getJSON(settings.server, {clean: postId},  function(data){
       
-        title = data.title;
-        body = data.body;
+        var s = '<div class="postEditArea" style="display: none">';
+        s += '<input type="text" class="editPostHeading" value="' + data.title + '">';
+        s += '<textarea class="editPostBody">' + data.body + '</textarea>';
+        s += '<div class="button editorButton previewButton">Preview</div>';
+        s += '<div class="button editorButton saveButton">Save</div>';
+        s += '<div class="button editorButton closeButton">Close</div>';
+        s += '</div>';
+
+        $(self).before(s).hide();
+
+        $('.postEditArea').slideToggle();
       
       });
-      
-      var s = '<div class="postEditArea" style="display: none">';
-      s += '<input type="text" class="editPostHeading">';
-      s += '<textarea class="editPostBody"></textarea>';
-      s += '<div class="button editorButton saveButton">Save</div>';
-      s += '<div class="button editorButton previewButton">Preview</div>';
-      s += '<div class="button editorButton closeButton">Close</div>';
-      s += '</div>';
-      
-      $(this).before(s).hide();
-      
-      $('.postEditArea').slideToggle();
     
     });
 
@@ -123,7 +119,6 @@
 
       if(data.morePosts == "1"){
         $(self).append('<div id="morePostsButton">Show More Posts</div>');
-        $('#morePostsButton').on('click',showMorePosts);
       }
 
     });

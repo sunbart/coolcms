@@ -119,7 +119,6 @@
         s += '<p>' + body + '</p>';
         s += '</div><div class="editPostButton">Edit Post</div></div>'
         
-        console.log(s);
         $(self).append(s);
       
       });     

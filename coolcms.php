@@ -45,11 +45,15 @@ if(count($_GET)) {
       
     } else if (isset($_GET['post'])){
       
-      get_post_by_id(mysqli_escape_string($link, $_GET['post']));   
+      get_post_by_id(mysqli_escape_string($link, $_GET['post']),false);   
       
     } else if (isset($_GET['parse'])){
     
-      parse($_GET['parse']);
+      $toSend = array('result' => parse($_GET['parse']));
+      
+      print_r(json_encode($toSend));
+      
+      
       
     }
 	
@@ -64,8 +68,6 @@ if(count($_GET)) {
 ### ---------------------
 
 function get_posts($offset, $count) {
-  
-    
 	
 	global $link;
     $morePosts = false;
@@ -96,10 +98,10 @@ function get_posts($offset, $count) {
     $json .= ',"morePosts":"' . $morePosts . '"';
 	$json .= "}";
 	
-	print $json;	
+	print($json);	
 }
 
-function get_post_by_id($postId){
+function get_post_by_id($postId, $clean){
 
   global $link;
   
@@ -117,11 +119,7 @@ function parse($markdown){
   include '/parsedown/Parsedown.php';
   $Parsedown = new Parsedown();
   
-  $toSend = array(
-    'result' => $Parsedown->text($markdown)  
-  ); 
-  
-  print json_encode($toSend);
+  return($Parsedown->text($markdown)); 
 
 }
 

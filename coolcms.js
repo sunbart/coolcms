@@ -36,6 +36,41 @@
       
       
     });
+    
+    
+    //Show more posts event 
+    //loads one more post, appends it in a proper format and 
+    //creates a new "Show More Posts" button, if appropriate
+    $(self).on('click', '#morePostsButton', function(event){
+          
+      $.getJSON(settings.server, {more: currentOffset + currentCount, count: 1}, function(data){
+        
+        $.each(data.posts, function(key, val) {
+        
+          $(self).append(formatPost(val))
+        
+        });
+        
+        $('#morePostsButton').remove();
+        
+        if(data.morePosts == "1"){
+          $(self).append('<div id="morePostsButton">Show More Posts</div>');
+        }
+        
+        currentCount++;
+        
+      });    
+      
+    });
+    
+    //Edit post event
+    $(self).on('click', '.editPostButton', function(event){
+    
+      var postId = $(this).parent().data('id');
+      
+      alert(postId);
+    
+    });
 
     //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags
     var formatPost = function(d) {
@@ -75,29 +110,6 @@
       }
 
     });
-
-    //Loads one more post, appends it in a proper format and creates a new "Show More Posts" button, if appropriate
-    var showMorePosts = function(){     
-      
-      $.getJSON(settings.server, {more: currentOffset + currentCount, count: 1}, function(data){
-        
-        $.each(data.posts, function(key, val) {
-        
-          $(self).append(formatPost(val))
-        
-        });
-        
-        $('#morePostsButton').remove();
-        
-        if(data.morePosts == "1"){
-          $(self).append('<div id="morePostsButton">Show More Posts</div>');
-          $('#morePostsButton').on('click',showMorePosts);
-        }
-        
-        currentCount++;
-        
-      });      
-    }
     
     //Loads, formats and appends the whole post identified by postId
     var showPostDetails = function(postId){

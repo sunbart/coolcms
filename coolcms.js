@@ -117,7 +117,7 @@
         s = '<div class="detailedPost" data-id="' + data.id + '"><h2 class="postHeading">' + data.title + '</h2>';
         s += '<p class="date">' + data.date + '</p><div class="postBody">';
         s += '<p>' + body + '</p>';
-        s += '</div></div>'
+        s += '</div><div class="editPostButton">Edit Post</div></div>'
         
         console.log(s);
         $(self).append(s);

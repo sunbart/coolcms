@@ -47,6 +47,10 @@ if(count($_GET)) {
       
       get_post_by_id(mysqli_escape_string($link, $_GET['post']));   
       
+    } else if (isset($_GET['parse']){
+    
+      parse($_GET['parse']);
+      
     }
 	
 } else {
@@ -117,7 +121,7 @@ function parse($markdown){
     'result' => $Parsedown->text($markdown);  
   ); 
   
-  return $output;
+  print json_encode($toSend);
 
 }
 

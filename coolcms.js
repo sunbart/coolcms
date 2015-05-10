@@ -31,12 +31,9 @@
         $('#morePostsButton').show();
         postDetail = false;
         $(window).scrollTop(previousWindowPostion);
-      }
+      }     
       
-      
-      
-    });
-    
+    });    
     
     //Show more posts event 
     //loads one more post, appends it in a proper format and 
@@ -80,7 +77,10 @@
       
       var s = '<div class="postEditArea" style="display: none">';
       s += '<input type="text" class="editPostHeading">';
-      s += '<textarea class="editPostBody"></textarea>';      
+      s += '<textarea class="editPostBody"></textarea>';
+      s += '<div class="button editorButton saveButton">Save</div>';
+      s += '<div class="button editorButton previewButton">Preview</div>';
+      s += '<div class="button editorButton closeButton">Close</div>';
       s += '</div>';
       
       $(this).before(s).hide();
@@ -146,7 +146,7 @@
         s = '<div class="detailedPost" data-id="' + data.id + '"><h2 class="postHeading">' + data.title + '</h2>';
         s += '<p class="date">' + data.date + '</p><div class="postBody">';
         s += '<p>' + body + '</p>';
-        s += '</div><div class="editPostButton">Edit Post</div></div>'
+        s += '</div><div class="button editPostButton">Edit Post</div></div>'
         
         $(self).append(s);
       

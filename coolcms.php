@@ -53,8 +53,6 @@ if(count($_GET)) {
       
       print_r(json_encode($toSend));
       
-      
-      
     }
 	
 } else {

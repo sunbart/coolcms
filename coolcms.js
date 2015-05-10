@@ -68,7 +68,24 @@
     
       var postId = $(this).parent().data('id');
       
-      alert(postId);
+      var title;
+      var body;
+      
+      $.getJSON(settings.server, {clean: postId}, function(data){
+      
+        title = data.title;
+        body = data.body;
+      
+      });
+      
+      var s = '<div class="postEditArea" style="display: none">';
+      s += '<input type="text" class="editPostHeading">';
+      s += '<textarea class="editPostBody"></textarea>';      
+      s += '</div>';
+      
+      $(this).before(s).hide();
+      
+      $('.postEditArea').slideToggle();
     
     });
 

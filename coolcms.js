@@ -17,7 +17,7 @@
     
     
     //Expand post click event
-    $('#blog').on('click', '.postHeading', function(event){
+    $(self).on('click', '.postHeading', function(event){
       
       var postId = $(this).parent().data('id');
        
@@ -51,9 +51,9 @@
       }
 
       s = '<div class="post" data-id="' + d.id + '"><h2 class="postHeading">' + d.title + '</h2>';
-      s += '<p>' + d.date + "</p>";
+      s += '<p class="date">' + d.date + '</p><div class="postBody">';
       s += body;
-      s += '</div>'
+      s += '</div></div>'
 
       return s;
       

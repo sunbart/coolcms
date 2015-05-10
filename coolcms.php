@@ -107,6 +107,20 @@ function get_post_by_id($postId){
 
 }
 
+function parse($markdown){
+
+  //include PHP Markdown Parser and instantiate it
+  include '/parsedown/Parsedown.php';
+  $Parsedown = new Parsedown();
+  
+  $toSend = array(
+    'result' => $Parsedown->text($markdown);  
+  ); 
+  
+  return $output;
+
+}
+
 ### ---------------------
 ### private functions
 ### ---------------------

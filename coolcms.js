@@ -13,8 +13,7 @@
       var postDetail = false;
       var self = this;
       var previousWindowPostion = 0;
-    }
-    
+    }    
     
     //Expand post click event
     $(self).on('click', '.postHeading', function(event){
@@ -36,10 +35,10 @@
     });    
     
     //Show more posts event 
+    $(self).on('click', '#morePostsButton', function(event){
     //loads one more post, appends it in a proper format and 
     //creates a new "Show More Posts" button, if appropriate
-    $(self).on('click', '#morePostsButton', function(event){
-          
+         
       $.getJSON(settings.server, {more: currentOffset + currentCount, count: 1}, function(data){
         
         $.each(data.posts, function(key, val) {
@@ -68,8 +67,10 @@
       var self = this;
       
       $.getJSON(settings.server, {clean: postId},  function(data){
+        
+        console.error(String(CryptoJS.MD5(data.body)));
       
-        var s = '<div class="postEditArea" style="display: none">';
+        var s = '<div class="postEditArea" style="display: none" data-hash="' + CryptoJS.MD5(data.body) + '">';
         s += '<input type="text" class="editPostHeading" value="' + data.title + '">';
         s += '<textarea class="editPostBody">' + data.body + '</textarea>';
         s += '<div class="button editorButton previewButton">Preview</div>';
@@ -83,6 +84,25 @@
       
       });
     
+    });
+    
+    //Close post editing form (checks, whether changes have been made, if yes, display dialogue)
+    $(self).on('click', '.closeButton', function(event){
+    
+      
+      console.log($(this).siblings('.editPostBody').val());
+      console.log(String(CryptoJS.MD5($(this).siblings('.editPostBody').val())));
+      console.log($('.postEditArea').data('hash'));
+      if(CryptoJS.MD5($(this).siblings('.editPostBody').val()) == $('.postEditArea').data('hash')){
+        alert('wow');
+      };
+      
+      
+      $('.postEditArea').slideUp(function(){
+        $('.postEditArea').remove();
+        $('.editPostButton').slideDown();
+      });
+      
     });
 
     //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags

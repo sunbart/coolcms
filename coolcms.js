@@ -82,8 +82,6 @@
 
         $('.postEditArea').slideToggle();
         
-        console.log($('.postEditArea').data('hash'));
-      
       });
     
     });
@@ -92,18 +90,28 @@
     $(self).on('click', '.closeButton', function(event){
     
       
-      //console.log($(this).siblings('.editPostBody').val());
-      //console.log(String(CryptoJS.MD5($(this).siblings('.editPostBody').val())));
-      console.log($('.postEditArea').data('hash'));
-      if(CryptoJS.MD5($(this).siblings('.editPostBody').val()) == $('.postEditArea').data('hash')){
-        alert('wow');
-      };
+      if(CryptoJS.MD5($(this).siblings('.editPostBody').val()) != $('.postEditArea').data('hash')){//changes have been made
+        
+        var save = true;
+        
+        $.jconfirm({//ask for confirmation
+          title: 'You made some changes.',
+          message: 'Do you really want to abandon them?',
+          confirm: 'Yes',
+          cancel: 'Go back'
+        }, function() {//discard changes
+          save = false;
+        });
+      } else {//no changes have been made      
+        $('.postEditArea').slideUp(function(){
+          $('.postEditArea').remove();
+          $('.editPostButton').slideDown(200);
+        });
+        save = false;
+      }
       
-      
-      $('.postEditArea').slideUp(function(){
-        $('.postEditArea').remove();
-        $('.editPostButton').slideDown();
-      });
+      //save if necessary
+      //TODO reuse save functionality
       
     });
 

@@ -45,12 +45,10 @@ body {
 }
 
 .postEditArea {
-  width: 100%;
-  /*height: 300px;*/
+  width: 858px;
   border: 1px solid black;
-  /*padding: 15px;*/
   padding: 20px;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
   overflow: hidden;
 }
 
@@ -61,7 +59,7 @@ body {
 }
 
 .editPostBody {
-  width: 898px;
+  width: 856px;
   height: 200px;
   resize: none;
   margin-bottom: 15px;

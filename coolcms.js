@@ -112,6 +112,22 @@
       
             
     });
+    
+    //Get parsed input from the server and 
+    $(self).on('click', '.previewButton',function(event){
+    
+      var postID = $(this).parent().parent().data('id');
+      var self = this;
+      
+      $.getJSON(settings.server, {parse:$('.editPostBody').val()}, function(data){
+      
+        $('div[data-id="' + postID + '"] h2').hide();
+      
+        console.log(data.result);
+        
+      });
+    
+    });
 
     //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags
     var formatPost = function(d) {

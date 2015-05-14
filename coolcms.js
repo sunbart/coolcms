@@ -68,9 +68,7 @@
       
       $.getJSON(settings.server, {clean: postId},  function(data){
         
-        console.error(String(CryptoJS.MD5(data.body)));
-      
-        var s = '<div class="postEditArea" style="display: none" data-hash="' + CryptoJS.MD5(data.body) + '">';
+        var s = '<div class="postEditArea" style="display: none" data-hash="">';
         s += '<input type="text" class="editPostHeading" value="' + data.title + '">';
         s += '<textarea class="editPostBody">' + data.body + '</textarea>';
         s += '<div class="button editorButton previewButton">Preview</div>';
@@ -79,8 +77,12 @@
         s += '</div>';
 
         $(self).before(s).hide();
+        
+        $('.postEditArea').data('hash', String(CryptoJS.MD5($('.editPostBody').val())));
 
         $('.postEditArea').slideToggle();
+        
+        console.log($('.postEditArea').data('hash'));
       
       });
     
@@ -90,8 +92,8 @@
     $(self).on('click', '.closeButton', function(event){
     
       
-      console.log($(this).siblings('.editPostBody').val());
-      console.log(String(CryptoJS.MD5($(this).siblings('.editPostBody').val())));
+      //console.log($(this).siblings('.editPostBody').val());
+      //console.log(String(CryptoJS.MD5($(this).siblings('.editPostBody').val())));
       console.log($('.postEditArea').data('hash'));
       if(CryptoJS.MD5($(this).siblings('.editPostBody').val()) == $('.postEditArea').data('hash')){
         alert('wow');
@@ -173,18 +175,4 @@
 
   };
   
-  $.fn.coolcmsAdmin = function(options){
-  
-    var settings = $.extend({
-      server: "coolcms.php"
-    }, options);
-    
-    var self = this;
-    
-    $(self).append('<textarea id="input"></textarea>');
-    
-    $(self).append(html_content);
-      
-  }
-
 }(jQuery));

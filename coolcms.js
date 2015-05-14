@@ -92,27 +92,25 @@
       
       if(CryptoJS.MD5($(this).siblings('.editPostBody').val()) != $('.postEditArea').data('hash')){//changes have been made
         
-        var save = true;
-        
         $.jconfirm({//ask for confirmation
           title: 'You made some changes.',
           message: 'Do you really want to abandon them?',
           confirm: 'Yes',
           cancel: 'Go back'
         }, function() {//discard changes
-          save = false;
+          $('.postEditArea').slideUp(function(){
+          $('.postEditArea').remove();
+          $('.editPostButton').slideDown(200);
+        });
         });
       } else {//no changes have been made      
         $('.postEditArea').slideUp(function(){
           $('.postEditArea').remove();
           $('.editPostButton').slideDown(200);
         });
-        save = false;
       }
       
-      //save if necessary
-      //TODO reuse save functionality
-      
+            
     });
 
     //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags

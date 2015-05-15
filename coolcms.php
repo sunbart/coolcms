@@ -2,6 +2,7 @@
 
 ### configuration
 
+
 $db['db_server'] = 'localhost';
 $db['db_user'] = 'root';
 $db['db_pass'] = '';
@@ -56,6 +57,14 @@ if(count($_GET)) {
     } else if (isset($_GET['clean'])) {
     
       get_post_by_id(mysqli_escape_string($link, $_GET['clean']),true);
+    
+    } else if (isset($_GET['save'])){
+    
+      $id = mysqli_escape_string($link, $_GET['save']);
+      $title = mysqli_escape_string($link, $_GET['title']);
+      $body = mysqli_escape_string($link, $_GET['body']);
+      
+      save_post($id, $title, $body);
     
     }
 	
@@ -120,7 +129,7 @@ function get_post_by_id($postId, $clean){
   print json_encode($toSend);
 
 }
-
+               
 function parse($markdown){
 
   //include PHP Markdown Parser and instantiate it
@@ -128,6 +137,18 @@ function parse($markdown){
   $Parsedown = new Parsedown();
   
   return($Parsedown->text($markdown)); 
+
+}
+               
+function save_post($postID, $title, $body){
+
+  $out = array(
+    'id' => $postID,
+    'title' => $title,
+    'body' => $body
+  );
+  
+  print json_encode($out);
 
 }
 

@@ -155,6 +155,16 @@
       });
     
     });
+    
+    $(self).on('click', '.saveButton', function(event){
+    
+      console.log({
+        save: $(this).parent().parent().data('id'),
+        title: $('.editPostHeading').val(),
+        body: $('.editPostBody').val()
+      });
+    
+    });
 
     //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags
     var formatPost = function(d) {

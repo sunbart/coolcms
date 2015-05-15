@@ -70,6 +70,10 @@ body {
   float: left;
 }
 
+.originalButton, .reloadButton {
+  width: 110px;
+}
+
 /* jConfirm dialog styling */
 
 #jconfirmOuter {

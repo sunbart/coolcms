@@ -68,7 +68,7 @@
       
       $.getJSON(settings.server, {clean: postId},  function(data){
         
-        var s = '<div class="postEditArea" style="display: none" data-hash="">';
+        var s = '<div class="postEditArea" style="display: none" data-bodyHash="" data-headingHash="">';
         s += '<input type="text" class="editPostHeading" value="' + data.title + '">';
         s += '<textarea class="editPostBody">' + data.body + '</textarea>';
         s += '<div class="button editorButton previewButton">Preview</div>';
@@ -78,8 +78,8 @@
 
         $(self).before(s).hide();
         
-        $('.postEditArea').data('hash', String(CryptoJS.MD5($('.editPostBody').val())));
-
+        $('.postEditArea').data('headingHash', String(CryptoJS.MD5($('.editPostHeading').val()))).data('bodyHash', String(CryptoJS.MD5($('.editPostBody').val())));
+        
         $('.postEditArea').slideToggle();
         
       });
@@ -88,10 +88,8 @@
     
     //Close post editing form (checks, whether changes have been made, if yes, display dialogue)
     $(self).on('click', '.closeButton', function(event){
-    
       
-      if(CryptoJS.MD5($(this).siblings('.editPostBody').val()) != $('.postEditArea').data('hash')){//changes have been made
-        
+      if(CryptoJS.MD5($(this).siblings('.editPostHeading').val()) != $('.postEditArea').data('headingHash') || CryptoJS.MD5($(this).siblings('.editPostBody').val()) != $('.postEditArea').data('bodyHash')){//changes have been made in heading or body
         $.jconfirm({//ask for confirmation
           title: 'You made some changes.',
           message: 'Do you really want to abandon them?',
@@ -110,20 +108,49 @@
         });
       }
       
+      //set timeout unbind Enter click event      
             
     });
     
-    //Get parsed input from the server and 
-    $(self).on('click', '.previewButton',function(event){
+    //Get parsed input from the server and populate the post with it
+    $(self).on('click', '.previewButton, .reloadButton',function(event){
     
       var postID = $(this).parent().parent().data('id');
       var self = this;
       
       $.getJSON(settings.server, {parse:$('.editPostBody').val()}, function(data){
       
-        $('div[data-id="' + postID + '"] h2').hide();
+        $('div[data-id="' + postID + '"] h2').text($('.editPostHeading').val());
+        $('div[data-id="' + postID + '"] .postBody').html(data.result);
+        
+        
+        var moreButtons = '';
+        
+        if($('.postEditArea').children('.originalButton').size() == 0){
+          moreButtons += '<div class="button editorButton originalButton" style="display: initial;">Show Original</div>\n';
+        }
+        moreButtons += '<div class="button editorButton reloadButton" style="display: initial;">Reload Preview</div>';
+        $(self).before(moreButtons);
+        
+        $(self).hide();
+        
+      });
+    
+    });
+    
+    //Reloads the post from the server
+    $(self).on('click','.originalButton',function(event){
+    
+      var self = this;
       
-        console.log(data.result);
+      $.getJSON(settings.server, {post: $(self).parents('.detailedPost').data('id')}, function(data){
+      
+        $(self).parents('.detailedPost').children('h2').text(data.title);
+        $(self).parents('.detailedPost').children('.postBody').html(data.body);
+        
+        $('.reloadButton').remove();
+        $('.previewButton').show();
+        $(self).remove();
         
       });
     

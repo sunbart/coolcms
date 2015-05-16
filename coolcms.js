@@ -182,6 +182,15 @@
       });
     
     });
+    
+    //Sends a request to create a new post to the server
+    $(self).on('click', '.newPostButton', function(event){
+    
+      $.getJSON(settings.server, {new: true}, function(data){
+      
+      });     
+    
+    });
 
     //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags
     var formatPost = function(d) {
@@ -209,6 +218,8 @@
     $.getJSON(settings.server, function(data) {
 
       $(self).empty();
+      
+      $(self).append('<div class="button newPostButton">Create New Post</button>');
       
       $.each(data.posts, function(key, val) {
         $(self).append(formatPost(val)); 

@@ -2,10 +2,17 @@
 
 ### configuration
 
+
 $db['db_server'] = 'localhost';
 $db['db_user'] = 'root';
 $db['db_pass'] = '';
 $db['db_database'] = 'coolcms';
+
+//include PHP Markdown Parser and instantiate it
+include '/parsedown/Parsedown.php';
+$parser = new Parsedown();
+  
+  
 
 ### ---------------------
 ### connect to database
@@ -45,12 +52,26 @@ if(count($_GET)) {
       
     } else if (isset($_GET['post'])){
       
-      get_post_by_id(mysqli_escape_string($link, $_GET['post']));   
+      get_post_by_id(mysqli_escape_string($link, $_GET['post']),false);   
       
-    } else if (isset($_GET['parse']){
+    } else if (isset($_GET['parse'])){
     
-      parse($_GET['parse']);
+      $toSend = array('result' => parse($_GET['parse']));
       
+      print_r(json_encode($toSend));
+      
+    } else if (isset($_GET['clean'])) {
+    
+      get_post_by_id(mysqli_escape_string($link, $_GET['clean']),true);
+    
+    } else if (isset($_GET['save'])){
+    
+      $id = mysqli_escape_string($link, $_GET['save']);
+      $title = mysqli_escape_string($link, $_GET['title']);
+      $body = mysqli_escape_string($link, $_GET['body']);
+      
+      save_post($id, $title, $body);
+    
     }
 	
 } else {
@@ -64,8 +85,6 @@ if(count($_GET)) {
 ### ---------------------
 
 function get_posts($offset, $count) {
-  
-    
 	
 	global $link;
     $morePosts = false;
@@ -87,7 +106,9 @@ function get_posts($offset, $count) {
 	$rows = array();
 
 	while ($row = mysqli_fetch_assoc($result)) {
-		$rows[] = $row;
+      $rowWithParsedBody = $row;
+      $rowWithParsedBody['body'] = parse($row['body']);
+      $rows[] = $rowWithParsedBody;
 	}	
 
 	//$json = '{"total":"' . $total[0] . '","posts":';
@@ -96,32 +117,49 @@ function get_posts($offset, $count) {
     $json .= ',"morePosts":"' . $morePosts . '"';
 	$json .= "}";
 	
-	print $json;	
+	print($json);	
 }
 
-function get_post_by_id($postId){
+function get_post_by_id($postId, $clean){
 
   global $link;
   
   $sql = 'SELECT * FROM posts WHERE id = ' . $postId;  
   $result = mysqli_query($link, $sql);
-  
   $toSend = mysqli_fetch_assoc($result);
+  
+  if(!$clean){
+  
+    $toSend['body'] = parse($toSend['body']);
+  
+  }
+  
   print json_encode($toSend);
 
 }
-
+               
 function parse($markdown){
+  global $parser;
+  return($parser->text($markdown)); 
 
-  //include PHP Markdown Parser and instantiate it
-  include '/parsedown/Parsedown.php';
-  $Parsedown = new Parsedown();
+}
+               
+function save_post($postID, $title, $body){
+
+  global $link;
   
-  $toSend = array(
-    'result' => $Parsedown->text($markdown);  
-  ); 
+  $sql = 'UPDATE posts SET title="' . $title . '", body="' . $body . '" WHERE id=' . $postID;
   
-  print json_encode($toSend);
+  mysqli_query($link, $sql);
+  
+  $sql = 'SELECT * FROM posts WHERE id=' . $postID;
+  $result = mysqli_query($link, $sql);
+  
+  $saveResult = mysqli_fetch_assoc($result);
+  $saveResult['body'] = parse($saveResult['body']);
+  
+  
+  print json_encode($saveResult);
 
 }
 

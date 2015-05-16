@@ -159,12 +159,26 @@
     //Passes information to the server, which saves it to the database and returns the updated post
     $(self).on('click', '.saveButton', function(event){
     
+        var self = this;
+      
       $.getJSON(settings.server, {
         save: $(this).parent().parent().data('id'),
         title: $('.editPostHeading').val(),
         body: $('.editPostBody').val()
       }, function(data){
-        console.log(data);
+        
+        $(self).parent().siblings('.postHeading').text(data.title);
+        $(self).parent().siblings('.postBody').html(data.body);
+        
+        $('.post[data-id=' + data.id + ']').before('<div class="placeholder"></div>').remove();
+        $('.placeholder').after(formatPost(data)).remove();
+        $('.post[data-id=' + data.id + ']').hide();
+        
+        $('.postEditArea').slideUp(function(){
+          $(this).remove();
+          $('.editPostButton').slideDown(200);
+        });
+        
       });
     
     });

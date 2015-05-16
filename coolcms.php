@@ -155,8 +155,11 @@ function save_post($postID, $title, $body){
   $sql = 'SELECT * FROM posts WHERE id=' . $postID;
   $result = mysqli_query($link, $sql);
   
+  $saveResult = mysqli_fetch_assoc($result);
+  $saveResult['body'] = parse($saveResult['body']);
   
-  print json_encode(mysqli_fetch_assoc($result));
+  
+  print json_encode($saveResult);
 
 }
 

@@ -8,6 +8,12 @@ $db['db_user'] = 'root';
 $db['db_pass'] = '';
 $db['db_database'] = 'coolcms';
 
+//include PHP Markdown Parser and instantiate it
+include '/parsedown/Parsedown.php';
+$parser = new Parsedown();
+  
+  
+
 ### ---------------------
 ### connect to database
 ### ---------------------
@@ -100,7 +106,9 @@ function get_posts($offset, $count) {
 	$rows = array();
 
 	while ($row = mysqli_fetch_assoc($result)) {
-		$rows[] = $row;
+      $rowWithParsedBody = $row;
+      $rowWithParsedBody['body'] = parse($row['body']);
+      $rows[] = $rowWithParsedBody;
 	}	
 
 	//$json = '{"total":"' . $total[0] . '","posts":';
@@ -131,24 +139,24 @@ function get_post_by_id($postId, $clean){
 }
                
 function parse($markdown){
-
-  //include PHP Markdown Parser and instantiate it
-  include '/parsedown/Parsedown.php';
-  $Parsedown = new Parsedown();
-  
-  return($Parsedown->text($markdown)); 
+  global $parser;
+  return($parser->text($markdown)); 
 
 }
                
 function save_post($postID, $title, $body){
 
-  $out = array(
-    'id' => $postID,
-    'title' => $title,
-    'body' => $body
-  );
+  global $link;
   
-  print json_encode($out);
+  $sql = 'UPDATE posts SET title="' . $title . '", body="' . $body . '" WHERE id=' . $postID;
+  
+  mysqli_query($link, $sql);
+  
+  $sql = 'SELECT * FROM posts WHERE id=' . $postID;
+  $result = mysqli_query($link, $sql);
+  
+  
+  print json_encode(mysqli_fetch_assoc($result));
 
 }
 

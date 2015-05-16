@@ -139,7 +139,7 @@
     });
     
     //Reloads the post from the server
-    $(self).on('click','.originalButton',function(event){
+    $(self).on('click', '.originalButton',function(event){
     
       var self = this;
       
@@ -156,12 +156,15 @@
     
     });
     
+    //Passes information to the server, which saves it to the database and returns the updated post
     $(self).on('click', '.saveButton', function(event){
     
-      console.log({
+      $.getJSON(settings.server, {
         save: $(this).parent().parent().data('id'),
         title: $('.editPostHeading').val(),
         body: $('.editPostBody').val()
+      }, function(data){
+        console.log(data);
       });
     
     });

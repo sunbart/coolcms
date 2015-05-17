@@ -102,15 +102,27 @@
           cancel: 'Go back'
         }, function() {//discard changes
           $('.postEditArea').slideUp(function(){
-          $('.postEditArea').remove();
-          $('.editPostButton').slideDown(200);
+            $('.postEditArea').remove();
+            $('.editPostButton').slideDown(200);
+          });
         });
+      } else {//no changes have been made   
+        if ($('.editPostHeading').val() == 'A Whole New Post'){
+          $.jconfirm({//ask for confirmation
+          title: 'You didn\'t change anything.',
+          message: 'The post template will be deleted from the database.',
+          confirm: 'Ok, fine',
+          cancel: 'Go back'
+        }, function() {//discard changes
+          $('.deleteButton').trigger('click');
+          $('.jconfirm_success').trigger('click');
         });
-      } else {//no changes have been made      
-        $('.postEditArea').slideUp(function(){
-          $('.postEditArea').remove();
-          $('.editPostButton').slideDown(200);
-        });
+        } else {
+          $('.postEditArea').slideUp(function(){
+            $('.postEditArea').remove();
+            $('.editPostButton').slideDown(200);
+          });
+        }
       }
       
       //set timeout unbind Enter click event      
@@ -191,7 +203,6 @@
     //Shows a verification and sends a request to the server if confirmed
     $(self).on('click', '.deleteButton', function(event){
     
-      alert('Hello');
       $.jconfirm({//ask for confirmation
         title: 'Do you really want to delete this post?',
         message: 'It will go away forever (a long time).',

@@ -80,7 +80,11 @@
         
         $('.postEditArea').data('headingHash', String(CryptoJS.MD5($('.editPostHeading').val()))).data('bodyHash', String(CryptoJS.MD5($('.editPostBody').val())));
         
-        $('.postEditArea').slideToggle();
+        $('.postEditArea').slideToggle(function(){
+          var offset = $('.postEditArea').offset().top;
+          $(window).scrollTop(offset);
+        });
+        
         
       });
     
@@ -186,8 +190,13 @@
     //Sends a request to create a new post to the server
     $(self).on('click', '.newPostButton', function(event){
     
-      $.getJSON(settings.server, {new: true}, function(data){
+      var self = this;
       
+      $.getJSON(settings.server, {new: true}, function(data){
+        $.getJSON(settings.server, {post: data.id}, function(data){
+          $(self).after(formatPost(data));
+          $('div[data-id="' + data.id + '"]').children('.postHeading').trigger('click');
+        });
       });     
     
     });
@@ -253,6 +262,9 @@
         s += '</div><div class="button editPostButton">Edit Post</div></div>'
         
         $(self).append(s);
+        if(data.title == 'A Whole New Post'){
+          $('.editPostButton').trigger('click');
+        }
       
       });     
       

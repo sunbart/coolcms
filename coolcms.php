@@ -74,7 +74,7 @@ if(count($_GET)) {
     
     } else if (isset($_GET['new'])){
     
-      
+      new_post();
     
     }
 	
@@ -172,6 +172,13 @@ function new_post(){
   global $link;
   
   $sql = 'INSERT INTO posts (date, title, body) VALUES (CURDATE(), "A Whole New Post", "This is a new post. Read further for formatting instructions, otherwise, feel free to delete all the text in here and begin with the creation of your next literary masterpiece.\n\nYou can use octothorpes (pound signs, hashtags) to create headings, like so:\n\n# Level 1 heading\n\n## Level 2 Heading\n\n### Level 3 heading\n\n#### And so on...\n\n####### Level 7 headings and below don\'t exist\n\nCreate new paragraphs by separating them by an empty line\n\nlike\n\nso.\n\nStuff like __bold__, _italics_, ~~strikethrough~~ and ___~~combinations~~___ is possible.\n\nUse these signs to create unordered lists:\n\n* An asterix\n- A dash\n+ A plus\n- You can mix them however you want\n\nOrdered lists need a number, a dot and some whitespace, like so:\n\n1. See?\n2. Quite easy.\n112358. The numbers do not matter.\n1. So you can be lazy and just use a 1.\n1. Also, notice that you need an empty line before the list.\n\n> Emphases and quotations could be useful\n> > You can nest them\n> > if you want,\n> > but to force a\n\n> > new\n\n> > line, use empty lines as a separator.\n\nCode blocks exist too...\n\n    print(\'Hello World\');\n    just_use(4, \'spaces\'); //Before all the lines\n\n<span style=\"color: red\">You can put in HTML and it will be preserved, but make sure to not overuse it. After all, that is what Markdown is for, to not make you write HTML</span>")';
+  
+  mysqli_query($link, $sql);
+  
+  $sql = 'SELECT id FROM posts WHERE title = "A Whole New Post"';
+  $result = mysqli_query($link, $sql);
+  
+  print(json_encode(mysqli_fetch_assoc($result)));
 
 }
 

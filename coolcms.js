@@ -237,6 +237,29 @@
     
     });
 
+    //Loads the first 5 posts
+    $.getJSON(settings.server, function(data) {
+
+      $(self).empty();
+      
+      var header = '<div id="header">';
+      header += '<h1>TheLoremIpsum</h1>';
+      header += '<div class="button newPostButton">Create New Post</div>';
+      header += '</div>';
+      
+      $(self).append(header);
+      
+      $.each(data.posts, function(key, val) {
+        $(self).append(formatPost(val)); 
+        
+      });
+
+      if(data.morePosts == "1"){
+        $(self).append('<div id="morePostsButton">Show More Posts</div>');
+      }
+
+    });
+    
     //Returns a post in proper HTML with \r\n\r\n replaced with paragraph tags
     var formatPost = function(d) {
 
@@ -258,24 +281,6 @@
       return s;
       
     };
-
-    //Loads the first 5 posts
-    $.getJSON(settings.server, function(data) {
-
-      $(self).empty();
-      
-      $(self).append('<div class="button newPostButton">Create New Post</button>');
-      
-      $.each(data.posts, function(key, val) {
-        $(self).append(formatPost(val)); 
-        
-      });
-
-      if(data.morePosts == "1"){
-        $(self).append('<div id="morePostsButton">Show More Posts</div>');
-      }
-
-    });
     
     //Loads, formats and appends the whole post identified by postId
     var showPostDetails = function(postId){

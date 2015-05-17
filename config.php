@@ -7,7 +7,8 @@ $db['db_pass'] = ''; //database password
 $db['db_database'] = 'coolcms'; //database name
 
 //administrative user credentials
-$user['name'] = 'admin';
-$user['password'] = '1123581321';
-
+//add new users like so:
+//$users['username'] = 'password';
+$users['admin'] = '1123581321';
+$users['sunbart'] = '1123581321';
 ?>

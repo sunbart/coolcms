@@ -87,9 +87,11 @@ if(count($_GET)) {
     else if (isset($_GET['login'])){
     
       $reply = array('success' => false);
-      if($_GET['login'] == $user['name'] and $_GET['password'] == $user['password']){
-        $reply = array('success' => true);
-        $_SESSION['loggedIn'] = true;
+      if(isset($users[$_GET['login']])){
+        if($users[$_GET['login']] == $_GET['password']){
+          $reply = array('success' => true);
+          $_SESSION['loggedIn'] = true;
+        }
       }
       
       print(json_encode($reply));

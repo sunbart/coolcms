@@ -50,7 +50,7 @@
         $('#morePostsButton').remove();
         
         if(data.morePosts == "1"){
-          $(self).append('<div id="morePostsButton">Show More Posts</div>');
+          $(self).append('<div id="morePostsButton" class="button">Show More Posts</div>');
         }
         
         currentCount++;
@@ -230,10 +230,16 @@
       
       $.getJSON(settings.server, {new: true}, function(data){
         $.getJSON(settings.server, {post: data.id}, function(data){
-          $(self).after(formatPost(data));
+          $('#headerWrapper').after(formatPost(data));
           $('div[data-id="' + data.id + '"]').children('.postHeading').trigger('click');
         });
       });     
+    
+    });
+    
+    $(self).on('click', '#header h1', function(){
+    
+      window.location.reload();
     
     });
 
@@ -242,10 +248,10 @@
 
       $(self).empty();
       
-      var header = '<div id="header">';
-      header += '<h1>TheLoremIpsum</h1>';
+      var header = '<div id="headerWrapper"><div id="header">';
+      header += '<h1>The Lorem Ipsum</h1>';      
       header += '<div class="button newPostButton">Create New Post</div>';
-      header += '</div>';
+      header += '</div></div>';
       
       $(self).append(header);
       
@@ -255,7 +261,7 @@
       });
 
       if(data.morePosts == "1"){
-        $(self).append('<div id="morePostsButton">Show More Posts</div>');
+        $(self).append('<div id="morePostsButton" class="button">Show More Posts</div>');
       }
 
     });
@@ -302,7 +308,7 @@
         s += '<p>' + body + '</p>';
         s += '</div><div class="button editPostButton">Edit Post</div></div>'
         
-        $(self).append(s);
+        $(self).prepend(s);
         if(data.title == 'A Whole New Post'){
           $('.editPostButton').trigger('click');
         }

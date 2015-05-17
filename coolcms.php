@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 ### configuration
 
 
@@ -7,6 +9,9 @@ $db['db_server'] = 'localhost';
 $db['db_user'] = 'root';
 $db['db_pass'] = '';
 $db['db_database'] = 'coolcms';
+
+$user['name'] = 'admin';
+$user['password'] = '1123581321';
 
 //include PHP Markdown Parser and instantiate it
 include '/parsedown/Parsedown.php';

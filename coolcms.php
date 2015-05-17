@@ -8,8 +8,6 @@ include 'config.php';
 //include PHP Markdown Parser and instantiate it
 include '/parsedown/Parsedown.php';
 $parser = new Parsedown();
-  
-  
 
 ### ---------------------
 ### connect to database
@@ -25,14 +23,6 @@ if(mysqli_connect_errno()) {
 ### ---------------------
 ### controller
 ### ---------------------
-
-/*
-coolcms.php           		    /get all posts
-coolcms.php?post=32   		    /get post 32
-coolcms.php?offset=1  	        /get posts 11 - 20
-coolcms.php?channel=3 		    /get all channel 3 posts
-coolcms.php?latest=5&channel=3
-*/
 
 if(count($_GET)) {
 
@@ -227,15 +217,3 @@ function delete_post($postID){
   print(json_encode($output));
   
 }
-
-### ---------------------
-### private functions
-### ---------------------
-/*
-function json_fix_encode($struct) {
-	
-   return preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", json_encode($struct));
-}*/
-
-
-

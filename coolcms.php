@@ -76,6 +76,10 @@ if(count($_GET)) {
     
       new_post();
     
+    } else if (isset($_GET['delete'])){
+    
+      delete_post(mysqli_escape_string($link, $_GET['delete']));
+      
     }
 	
 } else {
@@ -180,6 +184,18 @@ function new_post(){
   
   print(json_encode(mysqli_fetch_assoc($result)));
 
+}
+
+function delete_post($postID){
+
+  global $link;
+  
+  $sql = 'DELETE FROM posts WHERE id=' . $postID;
+  mysqli_query($link, $sql);
+  
+  $output = array('id' => $postID);
+  print(json_encode($output));
+  
 }
 
 ### ---------------------

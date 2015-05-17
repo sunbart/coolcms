@@ -73,7 +73,8 @@
         s += '<textarea class="editPostBody">' + data.body + '</textarea>';
         s += '<div class="button editorButton previewButton">Preview</div>';
         s += '<div class="button editorButton saveButton">Save</div>';
-        s += '<div class="button editorButton closeButton">Close</div>';
+        s += '<div class="button editorButton closeButton">Close</div>';        
+        s += '<div class="button editorButton deleteButton">Delete post</div>';
         s += '</div>';
 
         $(self).before(s).hide();
@@ -183,6 +184,30 @@
           $('.editPostButton').slideDown(200);
         });
         
+      });
+    
+    });
+    
+    //Shows a verification and sends a request to the server if confirmed
+    $(self).on('click', '.deleteButton', function(event){
+    
+      alert('Hello');
+      $.jconfirm({//ask for confirmation
+        title: 'Do you really want to delete this post?',
+        message: 'It will go away forever (a long time).',
+        confirm: 'Yes',
+        cancel: 'I changed my mind'
+      }, function() {//delete the post nd remove it from the currently open site
+        var postID = $('.detailedPost').data('id');
+        $.getJSON(settings.server, {delete: postID}, function(data){
+        
+          $('.post[data-id=' + data.id + ']').remove();
+          $('.detailedPost[data-id=' + data.id + ']').slideUp(500, function(){
+            $('.detailedPost[data-id=' + data.id + ']').children('.postHeading').trigger('click');
+            $('.detailedPost[data-id=' + data.id + ']').remove();
+          });
+        
+        });
       });
     
     });

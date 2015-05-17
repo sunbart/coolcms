@@ -70,7 +70,7 @@ body {
   float: left;
 }
 
-.originalButton, .reloadButton, .newPostButton {
+.originalButton, .reloadButton, .newPostButton, .deleteButton {
   width: 110px;
 }
 

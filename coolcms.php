@@ -119,12 +119,7 @@ function get_posts($offset, $count) {
 	global $link;
     $morePosts = false;
 	
-	$sql = "SELECT COUNT(1) FROM posts";
-	
-	$result = mysqli_query($link, $sql);
-	$total = mysqli_fetch_array($result);
-	
-	$sql = "SELECT * FROM posts ORDER BY date DESC LIMIT $offset, $count";
+	$sql = "SELECT * FROM posts ORDER BY date DESC, created DESC LIMIT $offset, $count";
   
     $result = mysqli_query($link,"SELECT * FROM posts ORDER BY date DESC LIMIT " . ($offset + $count) . ",1");
   

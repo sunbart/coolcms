@@ -52,6 +52,7 @@ body {
 
 #header .button {
   font-size: 13px;
+  margin-left: 10px;
 }
 
 h2 {
@@ -127,7 +128,7 @@ h2 {
 
 /* jConfirm dialog styling */
 
-#jconfirmOuter {
+#jconfirmOuter, #loginPromptBackground {
   position: fixed;
   top: 0;
   left: 0;
@@ -209,4 +210,34 @@ h2 {
   color: #c3aacd;
   margin-top: 10px;
   margin-bottom: 5px; 
+}
+
+/* Login prompt styling */
+
+#loginPrompt {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  width: 320px !important;
+  height: 150px;
+  overflow: hidden;
+  background-color: white;
+  padding: 20px;
+  border: 1px solid grey;
+  border-radius: 4px;  
+}
+
+#loginPrompt h1 {
+  margin-top: 0px;
+  font-size: 20px;
+}
+
+#loginPrompt input {
+  margin: 5px;
+  width: 280px;
+}
+
+#loginPrompt .button {
+  float: left;
+  margin: 10px 15px 0 0;
 }

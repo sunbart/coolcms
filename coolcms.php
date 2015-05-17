@@ -55,21 +55,25 @@ if(count($_GET)) {
       
       get_posts($offset, $count); 
       
-    } else if (isset($_GET['post'])){
+    }
+    else if (isset($_GET['post'])){
       
       get_post_by_id(mysqli_escape_string($link, $_GET['post']),false);   
       
-    } else if (isset($_GET['parse'])){
+    }
+    else if (isset($_GET['parse'])){
     
       $toSend = array('result' => parse($_GET['parse']));
       
       print_r(json_encode($toSend));
       
-    } else if (isset($_GET['clean'])) {
+    }
+    else if (isset($_GET['clean'])) {
     
       get_post_by_id(mysqli_escape_string($link, $_GET['clean']),true);
     
-    } else if (isset($_GET['save'])){
+    } 
+    else if (isset($_GET['save'])){
     
       $id = mysqli_escape_string($link, $_GET['save']);
       $title = mysqli_escape_string($link, $_GET['title']);
@@ -77,14 +81,43 @@ if(count($_GET)) {
       
       save_post($id, $title, $body);
     
-    } else if (isset($_GET['new'])){
+    } 
+    else if (isset($_GET['new'])){
     
       new_post();
     
-    } else if (isset($_GET['delete'])){
+    } 
+    else if (isset($_GET['delete'])){
     
       delete_post(mysqli_escape_string($link, $_GET['delete']));
       
+    } 
+    else if (isset($_GET['loggedin'])){
+    
+      $reply = array('loggedIn' => false);
+      if(isset($_SESSION['loggedIn']) and $_SESSION['loggedIn'] == true){
+        $reply['loggedIn'] = true;
+      }
+      
+      print(json_encode($reply));
+    
+    } 
+    else if (isset($_GET['login'])){
+    
+      $reply = array('success' => false);
+      if($_GET['login'] == $user['name'] and $_GET['password'] == $user['password']){
+        $reply = array('success' => true);
+        $_SESSION['loggedIn'] = true;
+      }
+      
+      print(json_encode($reply));
+    
+    } 
+    else if (isset($_GET['logout'])){
+    
+      unset($_SESSION['loggedIn']);      
+      print('{}');
+    
     }
 	
 } else {

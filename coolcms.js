@@ -237,9 +237,66 @@
     
     });
     
-    $(self).on('click', '#header h1', function(){
+    //Reloads the page
+    $(self).on('click', '#header h1', function(event){
     
       window.location.reload();
+    
+    });
+    
+    //Show login prompt
+    $(self).on('click', '.loginButton', function(event){
+    
+      var loginPrompt = '<div id="loginPromptBackground">';
+      loginPrompt += '<div id="loginPrompt">';
+      loginPrompt += '<h1>Please enter your credentials:</h1>';
+      loginPrompt += '<input type="text" id="username" value="admin"><br>';
+      loginPrompt += '<input type="password" id="password" value="1123581321"><br>';      
+      loginPrompt += '<div class="button loginSubmitButton">Submit</div>';      
+      loginPrompt += '<div class="button loginCancelButton">Cancel</div>';
+      loginPrompt += '</div></div>';
+      
+      $(self).append(loginPrompt);
+    
+    });
+    
+    //Send a request to revoke login credentials
+    $(self).on('click', '.logoutButton', function(event){
+    
+      $.getJSON(settings.server, {logout: 1}, function(data){
+        window.location.reload();
+      });
+    
+    });
+    
+    //Send and verify credentials
+    $(self).on('click', '.loginSubmitButton', function(){
+    
+      var username = $('#username').val().trim();
+      var password = $('#password').val().trim();
+      
+      $.getJSON(settings.server, {login: username, password: password}, function(data){
+        if(data.success == true){
+          
+          var buttons = '<div class="button logoutButton">Logout</div>';
+          buttons += '<div class="button newPostButton">Create New Post</div>';
+        
+          $('.loginButton').before(buttons).remove();
+          $('#loginPromptBackground').remove();
+          
+          $('.detailedPost').children('.postBody').after('<div class="button editPostButton">Edit Post</div>');
+          
+        } else {
+          alert('Incorrect credentials');
+        }
+      });
+    
+    });
+    
+    //Closes the login prompt
+    $(self).on('click', '.loginCancelButton', function(){
+    
+      $('#loginPromptBackground').remove();
     
     });
 
@@ -248,21 +305,36 @@
 
       $(self).empty();
       
+      var postsData = data;
+      
       var header = '<div id="headerWrapper"><div id="header">';
-      header += '<h1>The Lorem Ipsum</h1>';      
-      header += '<div class="button newPostButton">Create New Post</div>';
-      header += '</div></div>';
+      header += '<h1>The Lorem Ipsum</h1>';     
       
-      $(self).append(header);
-      
-      $.each(data.posts, function(key, val) {
-        $(self).append(formatPost(val)); 
+      $.getJSON(settings.server, {loggedin:1}, function(data){
+        
+        if(data.loggedIn == true){
+          header += '<div class="button logoutButton">Logout</div>';
+          header += '<div class="button newPostButton">Create New Post</div>';          
+        } else {
+          header += '<div class="button loginButton">Login</div>';
+        }
+        
+        header += '</div></div>';
+
+        $(self).append(header);
+
+        $.each(postsData.posts, function(key, val) {
+          $(self).append(formatPost(val)); 
+
+        });
+
+        if(postsData.morePosts == "1"){
+          $(self).append('<div id="morePostsButton" class="button">Show More Posts</div>');
+        }
         
       });
-
-      if(data.morePosts == "1"){
-        $(self).append('<div id="morePostsButton" class="button">Show More Posts</div>');
-      }
+      
+      
 
     });
     
@@ -272,8 +344,6 @@
       var s = '';
       
       var body = d.body;
-      
-      body = '<p>' + body.replace('\r\n\r\n','</p>\n<p>') + '</p>';
       
       if(body.length > 400){
         body = body.substring(0, body.indexOf('</p>'));
@@ -298,20 +368,25 @@
         
         body = data.body;
         
-        
-        while(!(body.indexOf('\r\n\r\n')==-1)){
-          body = body.replace('\r\n\r\n','</p>\n<p>');
-        }
-        
         s = '<div class="detailedPost" data-id="' + data.id + '"><h2 class="postHeading">' + data.title + '</h2>';
         s += '<p class="date">' + data.date + '</p><div class="postBody">';
-        s += '<p>' + body + '</p>';
-        s += '</div><div class="button editPostButton">Edit Post</div></div>'
+        s += body;
         
-        $(self).prepend(s);
-        if(data.title == 'A Whole New Post'){
-          $('.editPostButton').trigger('click');
-        }
+        $.getJSON(settings.server, {loggedin: 1}, function(data){
+        
+          if(data.loggedIn == true){
+            s += '</div><div class="button editPostButton">Edit Post</div>';
+          }
+          
+          s += '</div>';
+        
+          $(self).prepend(s);
+          if(data.title == 'A Whole New Post'){
+            $('.editPostButton').trigger('click');
+          }
+        
+        });
+        
       
       });     
       

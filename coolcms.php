@@ -115,8 +115,8 @@ if(count($_GET)) {
 ### ---------------------
 
 function get_posts($offset, $count) {
-	
-	global $link;
+  
+    global $link;
     $morePosts = false;
 	
 	$sql = "SELECT * FROM posts ORDER BY date DESC, created DESC LIMIT $offset, $count";
@@ -142,7 +142,7 @@ function get_posts($offset, $count) {
     $json .= ',"morePosts":"' . $morePosts . '"';
 	$json .= "}";
 	
-	print($json);	
+    print($json);	
 }
 
 function get_post_by_id($postId, $clean){
@@ -171,46 +171,63 @@ function parse($markdown){
                
 function save_post($postID, $title, $body){
 
-  global $link;
-  
-  $sql = 'UPDATE posts SET title="' . $title . '", body="' . $body . '" WHERE id=' . $postID;
-  
-  mysqli_query($link, $sql);
-  
-  $sql = 'SELECT * FROM posts WHERE id=' . $postID;
-  $result = mysqli_query($link, $sql);
-  
-  $saveResult = mysqli_fetch_assoc($result);
-  $saveResult['body'] = parse($saveResult['body']);
-  
-  
-  print json_encode($saveResult);
+  if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){ //check login
+    
+    global $link;
+
+    $sql = 'UPDATE posts SET title="' . $title . '", body="' . $body . '" WHERE id=' . $postID;
+
+    mysqli_query($link, $sql);
+
+    $sql = 'SELECT * FROM posts WHERE id=' . $postID;
+    $result = mysqli_query($link, $sql);
+
+    $saveResult = mysqli_fetch_assoc($result);
+    $saveResult['body'] = parse($saveResult['body']);
+
+    print json_encode($saveResult);
+    
+  } else {
+    print ('Login error');
+  }
 
 }
 
 function new_post(){
 
-  global $link;
-  
-  $sql = 'INSERT INTO posts (date, title, body) VALUES (CURDATE(), "A Whole New Post", "This is a new post. Read further for formatting instructions, otherwise, feel free to delete all the text in here and begin with the creation of your next literary masterpiece.\n\nYou can use octothorpes (pound signs, hashtags) to create headings, like so:\n\n# Level 1 heading\n\n## Level 2 Heading\n\n### Level 3 heading\n\n#### And so on...\n\n####### Level 7 headings and below don\'t exist\n\nCreate new paragraphs by separating them by an empty line\n\nlike\n\nso.\n\nStuff like __bold__, _italics_, ~~strikethrough~~ and ___~~combinations~~___ is possible.\n\nUse these signs to create unordered lists:\n\n* An asterix\n- A dash\n+ A plus\n- You can mix them however you want\n\nOrdered lists need a number, a dot and some whitespace, like so:\n\n1. See?\n2. Quite easy.\n112358. The numbers do not matter.\n1. So you can be lazy and just use a 1.\n1. Also, notice that you need an empty line before the list.\n\n> Emphases and quotations could be useful\n> > You can nest them\n> > if you want,\n> > but to force a\n\n> > new\n\n> > line, use empty lines as a separator.\n\nCode blocks exist too...\n\n    print(\'Hello World\');\n    just_use(4, \'spaces\'); //Before all the lines\n\n<span style=\"color: red\">You can put in HTML and it will be preserved, but make sure to not overuse it. After all, that is what Markdown is for, to not make you write HTML</span>")';
-  
-  mysqli_query($link, $sql);
-  
-  $sql = 'SELECT id FROM posts WHERE title = "A Whole New Post"';
-  $result = mysqli_query($link, $sql);
-  
-  print(json_encode(mysqli_fetch_assoc($result)));
+  if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){  //check login
+    
+    global $link;
+
+    $sql = 'INSERT INTO posts (date, title, body) VALUES (CURDATE(), "A Whole New Post", "This is a new post. Read further for formatting instructions, otherwise, feel free to delete all the text in here and begin with the creation of your next literary masterpiece.\n\nYou can use octothorpes (pound signs, hashtags) to create headings, like so:\n\n# Level 1 heading\n\n## Level 2 Heading\n\n### Level 3 heading\n\n#### And so on...\n\n####### Level 7 headings and below don\'t exist\n\nCreate new paragraphs by separating them by an empty line\n\nlike\n\nso.\n\nStuff like __bold__, _italics_, ~~strikethrough~~ and ___~~combinations~~___ is possible.\n\nUse these signs to create unordered lists:\n\n* An asterix\n- A dash\n+ A plus\n- You can mix them however you want\n\nOrdered lists need a number, a dot and some whitespace, like so:\n\n1. See?\n2. Quite easy.\n112358. The numbers do not matter.\n1. So you can be lazy and just use a 1.\n1. Also, notice that you need an empty line before the list.\n\n> Emphases and quotations could be useful\n> > You can nest them\n> > if you want,\n> > but to force a\n\n> > new\n\n> > line, use empty lines as a separator.\n\nCode blocks exist too...\n\n    print(\'Hello World\');\n    just_use(4, \'spaces\'); //Before all the lines\n\n<span style=\"color: red\">You can put in HTML and it will be preserved, but make sure to not overuse it. After all, that is what Markdown is for, to not make you write HTML</span>")';
+
+    mysqli_query($link, $sql);
+
+    $sql = 'SELECT id FROM posts WHERE title = "A Whole New Post"';
+    $result = mysqli_query($link, $sql);
+
+    print(json_encode(mysqli_fetch_assoc($result)));
+    
+  } else {
+    print ('Login error');
+  }
 
 }
 
 function delete_post($postID){
 
-  global $link;
-  
-  $sql = 'DELETE FROM posts WHERE id=' . $postID;
-  mysqli_query($link, $sql);
-  
-  $output = array('id' => $postID);
-  print(json_encode($output));
+  if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){ //check login
+    
+    global $link;
+
+    $sql = 'DELETE FROM posts WHERE id=' . $postID;
+    mysqli_query($link, $sql);
+
+    $output = array('id' => $postID);
+    print(json_encode($output));
+    
+  } else {
+    print ('Login error');
+  }
   
 }

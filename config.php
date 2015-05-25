@@ -10,5 +10,5 @@ $db['db_database'] = 'coolcms'; //database name
 //add new users like so:
 //$users['username'] = 'password';
 $users['admin'] = '1123581321';
-$users['sunbart'] = '1123581321';
+
 ?>

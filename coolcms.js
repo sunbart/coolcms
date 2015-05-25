@@ -215,7 +215,6 @@
           $('.post[data-id=' + data.id + ']').remove();
           $('.detailedPost[data-id=' + data.id + ']').slideUp(500, function(){
             $('.detailedPost[data-id=' + data.id + ']').children('.postHeading').trigger('click');
-            $('.detailedPost[data-id=' + data.id + ']').remove();
           });
         
         });
